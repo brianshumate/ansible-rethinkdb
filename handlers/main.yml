@@ -1,0 +1,15 @@
+---
+# File: handlers/main.yml
+# Main handlers for common features of the ansible-rethinkdb role
+
+- name: Update kernel settings
+  command: sysctl -e -p /etc/sysctl.d/rethinkdb.conf
+
+- name: Source local settings
+  command: /bin/bash /etc/rc.local
+
+- name: Restart RethinkDB
+  service: name=rethinkdb state=restarted
+
+- name: Start RethinkDB
+  service: name=rethinkdb state=started

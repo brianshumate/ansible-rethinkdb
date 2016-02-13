@@ -1,0 +1,34 @@
+---
+# File: build_cluster.yml
+# Example Ansible playbook to install RethinkDB on nodes specified by
+# hosts inventory, and initialize a cluster
+
+- hosts: cluster_nodes
+  become: yes
+  become_user: root
+  vars_files:
+    - "../defaults/{{ ansible_distribution }}.yml"
+  tasks:
+
+    - name: Create cluster grouping
+      group_by: key={{ node_role }}
+  roles:
+    - brianshumate.rethinkdb
+
+- hosts: additional_nodes
+  become: yes
+  become_user: root
+  vars_files:
+    - "../defaults/main.yml"
+    - "../defaults/{{ ansible_distribution }}.yml"
+  vars:
+    rethinkdb_primary: "{{hostvars[groups['primary'][0]]['inventory_hostname']}}"
+  tasks:
+
+  - name: Join additonal nodes
+    lineinfile: dest=/etc/rethinkdb/instances.d/{{ ansible_hostname }}.conf line="join={{rethinkdb_primary}}"
+    tags: initialization
+
+  - name: Restart service
+    service: name=rethinkdb state=restarted
+

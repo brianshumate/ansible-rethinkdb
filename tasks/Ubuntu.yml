@@ -1,0 +1,28 @@
+---
+# File: tasks/Ubuntu.yml - Ubuntu tasks for ansible-rethinkdb
+# Download and install RethinkDB
+
+- name: Add sources file
+  file: path=/etc/apt/sources.list.d/rethinkdb.list state=touch
+  tags: installation
+
+- name: Add repository
+  lineinfile: dest=/etc/apt/sources.list.d/rethinkdb.list line="deb http://download.rethinkdb.com/apt precise main"
+  tags: installation
+
+- name: Add key
+  apt_key: url=http://download.rethinkdb.com/apt/pubkey.gpg state=present
+  tags: installation
+
+- name: Install
+  apt: name=rethinkdb state=present update_cache=yes
+  tags: installation
+
+- name: Enable service
+  service: name=rethinkdb enabled=yes
+  tags: service
+
+- name: Configure instance
+  template: src=instance.conf.j2 dest=/etc/rethinkdb/instances.d/{{ ansible_hostname }}.conf
+  notify: Start RethinkDB
+  tags: configuration

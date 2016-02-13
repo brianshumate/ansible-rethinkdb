@@ -1,0 +1,38 @@
+---
+# File: tasks/main.yml - Main tasks for ansible-rethinkdb
+
+#- name: Distribution variables
+#  include_vars: "{{ ansible_distribution }}.yml"
+
+# CentOS tasks
+- include: CentOS.yml
+  when: ansible_distribution  == "CentOS"
+
+# Debian tasks
+- include: Debian.yml
+  when: ansible_distribution  == "Debian"
+
+# Red Hat tasks
+- include: RedHat.yml
+  when: ansible_distribution  == "RedHat"
+
+# Ubuntu tasks
+- include: Ubuntu.yml
+  when: ansible_distribution  == "Ubuntu"
+
+- name: Update user limits
+  copy: src=etc_security_limits.d_rethinkdb.conf dest=/etc/security/limits.d/rethinkdb.conf owner=root group=root mode=0644
+  when: rethinkdb_tune_os
+
+- name: Optimized settings for RethinkDB data and index volumes
+  mount: name={{ rethinkdb_mountpoint }} src={{ rethinkdb_partition }} opts={{ rethinkdb_mount_options }} fstype={{ rethinkdb_filesystem }} state=mounted
+  when: rethinkdb_tune_os
+
+- name: Kernel settings dir
+  file: dest=/etc/sysctl.d state=directory
+  when: rethinkdb_tune_os
+
+- name: Kernel settings config
+  template: src=etc_sysctl.d_rethinkdb.conf.j2 dest=/etc/sysctl.d/rethinkdb.conf owner=root group=root mode=0644
+  notify: Update kernel settings
+  when: rethinkdb_tune_os

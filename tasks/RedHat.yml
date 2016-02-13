@@ -1,0 +1,24 @@
+---
+# File: tasks/RedHat.yml - RHEL tasks for ansible-rethinkdb
+# Download and install SELinux Python moduel and RethinkDB
+
+- name: SELinux Python Module
+  yum: name=libselinux-python state=present
+  tags: installation
+
+- name: Download
+  get_url: url={{ rethinkdb_url }} dest=/tmp/{{ rethinkdb_package }} sha256sum={{ rethinkdb_sha256 }} timeout=240
+  tags: installation
+
+- name: Install
+  yum: name=rethinkdb state=present
+  tags: installation
+
+- name: Enable service
+  service: name=rethinkdb enabled=yes
+  tags: service
+
+- name: Configure instance
+  template: src=instance.conf.j2 dest=/etc/rethinkdb/instances.d/{{ ansible_hostname }}.conf
+  notify: Start RethinkDB
+  tags: configuration

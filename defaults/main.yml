@@ -1,0 +1,60 @@
+---
+# File: defaults/main.yml - Default ansible-rethinkdb variables
+
+#############################################################################
+# RethinkDB default variables
+#
+# rethinkdb_runuser: RethinkDB process OS user
+# rethinkdb_rungroup: RethinkDB process OS group
+# rethinkdb_cache_size: Cache size to allocate (in megabytes)
+# rethinkdb_cores: Number of CPU cores to allocate
+# rethinkdb_io_threads: Number of disk I/O threads to allocate
+# rethinkdb_admin_port: Administration and web console port
+# rethinkdb_driver_port: Client driver port
+# rethinkdb_cluster_port: Intra-cluster communication port
+# rethinkdb_filesystem: Default filesystem type for data and index volumes
+# rethinkdb_mountpoint: Logical volume mountpoint
+# rethinkdb_partition: Logical volume partition
+# rethinkdb_mount_options: Additional mount options
+# rethinkdb_data_path: Path to data files
+# rethinkdb_log_path: Path to log files
+# rethinkdb_tune_os: Whether to tune the OS with optimized settings
+#
+# OS tuneables
+#
+#############################################################################
+
+rethinkdb_runuser: rethinkdb
+rethinkdb_rungroup: rethinkdb
+rethinkdb_cache_size: 1024
+rethinkdb_cores: 2
+rethinkdb_io_threads: 64
+rethinkdb_admin_port: 8080
+rethinkdb_driver_port: 28015
+rethinkdb_cluster_port: 29015
+rethinkdb_filesystem: ext4
+rethinkdb_mountpoint: /
+rethinkdb_partition: /dev/mapper/VolGroup-lv_root
+rethinkdb_mount_options: noatime,barrier=0,errors=remount-ro
+rethinkdb_data_path: /var/lib/rethinkdb/default
+rethinkdb_log_file: /var/log/rethinkdb
+
+# OS tuneables
+rethinkdb_tune_os: false
+rethinkdb_swappiness: 0
+rethinkdb_tcp_rfc1337: 1
+rethinkdb_tcp_workaround_signed_windows: 1
+rethinkdb_tcp_sack: 1
+rethinkdb_tcp_fack: 1
+rethinkdb_mtu_probing: 1
+rethinkdb_file_max: 524288
+rethinkdb_netdev_max_backlog: 300000
+rethinkdb_tcp_moderate_rcvbuf: 1
+rethinkdb_tcp_congestion_control: htcp
+rethinkdb_somaxconn: 40000
+rethinkdb_tcp_max_syn_backlog: 40000
+rethinkdb_tcp_window_scaling: 1
+rethinkdb_tcp_fin_timeout: 15
+rethinkdb_tcp_keepalive_intvl: 30
+rethinkdb_dirty_bytes: 209715200
+rethinkdb_dirty_background_bytes: 104857600

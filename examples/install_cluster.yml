@@ -1,0 +1,17 @@
+---
+# File: install_cluster.yml
+# Example Ansible playbook to install RethinkDB on nodes specified by
+# hosts inventory — this does not create a clustered installation. for that
+# see build_cluster.yml
+
+- hosts: cluster_nodes
+  become: yes
+  become_user: root
+  vars_files:
+    - "../defaults/{{ ansible_distribution }}.yml"
+  tasks:
+
+    - name: Create cluster grouping
+      group_by: key={{ node_role }}
+  roles:
+    - brianshumate.rethinkdb

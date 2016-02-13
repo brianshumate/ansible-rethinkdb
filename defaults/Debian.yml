@@ -1,0 +1,4 @@
+---
+# File: defaults/Debian.yml - Debian ansible-rethinkdb defaults
+
+rethinkdb_latest_version: 2.2.4

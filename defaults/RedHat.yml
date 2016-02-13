@@ -1,0 +1,4 @@
+---
+# File: defaults/RedHat.yml - RHEL ansible-rethinkdb defaults
+
+rethinkdb_latest_version: 2.2.4
